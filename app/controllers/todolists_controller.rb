@@ -4,11 +4,13 @@ class TodolistsController < ApplicationController
   end
 
   def create
-    # 1. データを新規登録するためのインスタンス作成
     list = List.new(list_params)
-    # 2. データをデータベースに保存するためのsaveメソッド実行
     list.save
-    # 3. 詳細画面へリダイレクト
+    tags = Vision.get_image_data(list.image) 
+    tags.each do |tag|
+      list.tags.create(name: tag)
+    end
+    
     redirect_to todolist_path(list.id)
   end
 
